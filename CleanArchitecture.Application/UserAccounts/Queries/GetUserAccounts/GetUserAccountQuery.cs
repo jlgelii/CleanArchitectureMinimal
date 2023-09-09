@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using CleanArchitecture.Domain.Common;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.UserAccounts.Queries.GetUserAccounts
 {
-    public class GetUserAccountQuery : IRequest<List<GetUserAccountQueryResponse>>
+    public class GetUserAccountQuery : IRequest<ResponseApi<List<GetUserAccountQueryResponse>>>
     {
     }
 }

@@ -18,7 +18,10 @@ namespace CleanArchitecture.API.Endpoints
             root.MapGet("/", async (ISender sender) =>
             {
                 var response = await sender.Send(new GetUserAccountQuery());
-                return response;
+                if (response.Error)
+                    return Results.BadRequest(response.ModelStateError);
+
+                return Results.Ok(response.Data);
             });
 
 
