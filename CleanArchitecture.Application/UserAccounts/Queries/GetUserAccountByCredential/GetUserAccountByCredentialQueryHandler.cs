@@ -7,22 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.UserAccounts.Queries.GetUserAccountByCredential
 {
-    public class GetUserAccountByCredentialQueryHandler : IRequestHandler<GetUserAccountByCredentialQuery, GetUserAccountByCredentialQueryResponse>
+    public class GetUserAccountByCredentialQueryHandler : IRequestHandler<GetUserAccountByCredentialQuery, ResponseApi<GetUserAccountByCredentialQueryResponse>>
     {
         private readonly IJwtServices _jwt;
-        private readonly IApplicationDatabase _context;
+        private readonly IApplicationDatabaseContext _context;
 
-        public GetUserAccountByCredentialQueryHandler(IJwtServices jwt, IApplicationDatabase context)
+        public GetUserAccountByCredentialQueryHandler(IJwtServices jwt, 
+            IApplicationDatabaseContext context)
         {
             this._jwt = jwt;
             this._context = context;
         }
 
-        public async Task<GetUserAccountByCredentialQueryResponse> Handle(GetUserAccountByCredentialQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseApi<GetUserAccountByCredentialQueryResponse>> Handle(GetUserAccountByCredentialQuery request, CancellationToken cancellationToken)
         {
-            var users = await _context.UserAccount.ToListAsync();
+            var users = await _context.UserAccount
+                                      .FirstOrDefaultAsync(u => u.Username == request.Username
+                                                             && u.Password == request.Password);
 
-            return new GetUserAccountByCredentialQueryResponse()
+            return await Task.FromResult(ResponseApi.Success(new GetUserAccountByCredentialQueryResponse()
             {
                 Id = 1,
                 Username = request.Username,
@@ -30,7 +33,7 @@ namespace CleanArchitecture.Application.UserAccounts.Queries.GetUserAccountByCre
                 {
                     UserId = 1
                 }),
-            };
+            }));
         }
     }
 }

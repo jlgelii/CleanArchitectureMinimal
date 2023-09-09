@@ -16,7 +16,11 @@ namespace CleanArchitecture.API.Endpoints
             root.MapPost("/", async (ISender sender, GetUserAccountByCredentialQuery query) =>
             {
                 var response = await sender.Send(query);
-                return response;
+
+                if (response.Error)
+                    return Results.BadRequest(response.ModelStateError);
+
+                return Results.Ok(response.Data);
             })
             .AllowAnonymous();
 

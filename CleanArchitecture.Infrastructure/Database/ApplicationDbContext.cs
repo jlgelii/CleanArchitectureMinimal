@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Database
 {
-    public class ApplicationDbContext : AppDbContext, IApplicationDatabase
+    public class ApplicationDbContext : AppDbContext, IApplicationDatabaseContext
     {
         private readonly IJwtServices _jwtServices;
         private readonly IDateTimeServices _dateTimeServices;
@@ -25,7 +25,7 @@ namespace CleanArchitecture.Infrastructure.Database
             this._dateTimeServices = dateTimeServices;
         }
 
-        void IApplicationDatabase.SaveChanges()
+        void IApplicationDatabaseContext.SaveChanges()
         {
             SaveChanges();
         }
