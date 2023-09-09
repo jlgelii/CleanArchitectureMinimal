@@ -1,3 +1,4 @@
+using CleanArchitecture.API.Configurations.Middleware;
 using CleanArchitecture.API.Configurations.Services;
 using CleanArchitecture.API.Endpoints;
 using CleanArchitecture.Application;
@@ -23,6 +24,7 @@ builder.Services.AddJwt();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 builder.Services.AddValidators();
+builder.Services.AddCorsAll();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(EntryPoint).Assembly));
@@ -36,11 +38,16 @@ builder.Services.AddScoped<IApplicationDatabaseContext, ApplicationDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+var showException = false;
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    showException = true;
+    app.ConfigureSwaggerHandler();
 }
+
+app.UseCors("CorsPolicy");
+app.ConfigureExceptionHandler(showException);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

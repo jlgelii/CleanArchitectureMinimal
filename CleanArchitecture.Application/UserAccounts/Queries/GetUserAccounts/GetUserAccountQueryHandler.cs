@@ -21,6 +21,8 @@ namespace CleanArchitecture.Application.UserAccounts.Queries.GetUserAccounts
 
         public async Task<ResponseApi<List<GetUserAccountQueryResponse>>> Handle(GetUserAccountQuery request, CancellationToken cancellationToken)
         {
+            int s = Convert.ToInt32("d");
+
             var users = await _context.UserAccount
                                     .Select(u => new GetUserAccountQueryResponse
                                     {
